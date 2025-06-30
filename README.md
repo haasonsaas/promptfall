@@ -14,8 +14,12 @@ Promptfall is a real-time competitive game where players:
 
 ```bash
 # Clone the repository
-git clone https://github.com/haasonhaas/promptfall.git
+git clone https://github.com/haasonsaas/promptfall.git
 cd promptfall
+
+# Create and activate virtual environment (recommended)
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -e .
@@ -28,6 +32,9 @@ cp .env.example .env
 ## 🎯 Usage
 
 ```bash
+# Activate virtual environment first
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
 # Run the game
 promptfall
 
