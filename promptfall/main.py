@@ -205,6 +205,9 @@ class GameScreen(Screen):
             {"player_id": "ai2", "player_name": "AI Assistant Beta", "response": selected_ai_responses[1]}
         ]
         
+        # Debug: Print responses data
+        self.show_status(f"Starting vote with {len(responses_for_voting)} responses")
+        
         # Show voting screen
         from .voting import VotingScreen
         voting_screen = VotingScreen(

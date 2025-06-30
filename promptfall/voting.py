@@ -1,7 +1,7 @@
 """Voting UI components for Promptfall."""
 
-from textual.containers import Container, Vertical, Horizontal
-from textual.widgets import Static, Button, Label
+from textual.containers import Container, Vertical, Horizontal, ScrollableContainer
+from textual.widgets import Static, Button, Label, Header, Footer
 from textual.screen import Screen
 from textual.reactive import reactive
 from typing import List, Dict, Any
@@ -22,20 +22,16 @@ class VotingScreen(Screen):
         
     def compose(self):
         """Create voting UI components."""
-        yield Container(
-            Vertical(
-                Static("🗳️ Vote for the Best Response!", id="voting-title"),
-                Static(f"Time remaining: {self.time_remaining}s", id="voting-timer"),
-                Container(id="responses-container"),
-                Horizontal(
-                    Button("Skip Vote", id="skip-vote", variant="warning"),
-                    Button("← Back", id="back-to-game", variant="error"),
-                    id="voting-actions"
-                ),
-                id="voting-content"
-            ),
-            id="voting-main"
-        )
+        yield Header()
+        with Container(id="voting-main"):
+            with Vertical(id="voting-content"):
+                yield Static("🗳️ Vote for the Best Response!", id="voting-title")
+                yield Static(f"Time remaining: {self.time_remaining}s", id="voting-timer")
+                yield Container(id="responses-container")
+                with Horizontal(id="voting-actions"):
+                    yield Button("Skip Vote", id="skip-vote", variant="warning")
+                    yield Button("← Back", id="back-to-game", variant="error")
+        yield Footer()
         
     def on_mount(self):
         """Called when screen is mounted."""
@@ -45,29 +41,40 @@ class VotingScreen(Screen):
         """Populate the responses for voting."""
         container = self.query_one("#responses-container")
         
+        # Debug info
+        debug_info = Static(f"Debug: Found {len(self.responses)} responses", classes="debug-info")
+        container.mount(debug_info)
+        
+        if not self.responses:
+            container.mount(Static("No responses to vote on!", classes="no-responses"))
+            return
+            
         for i, response_data in enumerate(self.responses):
             player_name = response_data.get("player_name", "Unknown")
-            response_text = response_data.get("response", "")
-            player_id = response_data.get("player_id")
+            response_text = response_data.get("response", "No response provided")
+            player_id = response_data.get("player_id", f"player_{i}")
+            
+            # Truncate very long responses
+            if len(response_text) > 200:
+                response_text = response_text[:197] + "..."
             
             # Create response card
-            response_card = Container(
-                Vertical(
-                    Static(f"Response by {player_name}", classes="response-author"),
-                    Static(f'"{response_text}"', classes="response-text"),
-                    Button(
-                        f"Vote for {player_name}", 
-                        id=f"vote-{player_id}",
-                        variant="primary",
-                        classes="vote-button"
-                    ),
-                    classes="response-card"
-                ),
-                id=f"response-{i}",
-                classes="response-container"
-            )
+            response_container = Container(classes="response-container")
+            response_card = Vertical(classes="response-card")
             
-            container.mount(response_card)
+            # Add content to card
+            response_card.mount(Static(f"Response by {player_name}", classes="response-author"))
+            response_card.mount(Static(f'"{response_text}"', classes="response-text"))
+            response_card.mount(Button(
+                f"Vote for {player_name}", 
+                id=f"vote-{player_id}",
+                variant="primary",
+                classes="vote-button"
+            ))
+            
+            # Mount card to container and container to main container
+            response_container.mount(response_card)
+            container.mount(response_container)
             
     def on_button_pressed(self, event: Button.Pressed):
         """Handle button press events."""
@@ -126,19 +133,15 @@ class ResultsScreen(Screen):
         
     def compose(self):
         """Create results UI components."""
-        yield Container(
-            Vertical(
-                Static("🏆 Round Results!", id="results-title"),
-                Container(id="results-container"),
-                Horizontal(
-                    Button("Next Round", id="next-round", variant="primary"),
-                    Button("← Back to Lobby", id="back-to-lobby", variant="warning"),
-                    id="results-actions"
-                ),
-                id="results-content"
-            ),
-            id="results-main"
-        )
+        yield Header()
+        with Container(id="results-main"):
+            with Vertical(id="results-content"):
+                yield Static("🏆 Round Results!", id="results-title")
+                yield Container(id="results-container")
+                with Horizontal(id="results-actions"):
+                    yield Button("Next Round", id="next-round", variant="primary")
+                    yield Button("← Back to Lobby", id="back-to-lobby", variant="warning")
+        yield Footer()
         
     def on_mount(self):
         """Called when screen is mounted."""
@@ -148,10 +151,18 @@ class ResultsScreen(Screen):
         """Populate the results display."""
         container = self.query_one("#results-container")
         
+        if not self.results:
+            container.mount(Static("No results to display!", classes="no-results"))
+            return
+        
         for i, result in enumerate(self.results):
             player_name = result.get("player_name", "Unknown")
-            response = result.get("response", "")
+            response = result.get("response", "No response")
             score = result.get("score", 0)
+            
+            # Truncate very long responses
+            if len(response) > 150:
+                response = response[:147] + "..."
             
             # Determine ranking
             if i == 0:
@@ -167,18 +178,18 @@ class ResultsScreen(Screen):
                 rank_icon = f"{i+1}."
                 rank_text = f"{i+1}th Place"
                 
-            result_card = Container(
-                Vertical(
-                    Static(f"{rank_icon} {rank_text} - {player_name}", classes="result-rank"),
-                    Static(f"Score: {score} points", classes="result-score"),
-                    Static(f'Response: "{response}"', classes="result-response"),
-                    classes="result-card"
-                ),
-                id=f"result-{i}",
-                classes="result-container"
-            )
+            # Create result card
+            result_container = Container(classes="result-container")
+            result_card = Vertical(classes="result-card")
             
-            container.mount(result_card)
+            # Add content to card
+            result_card.mount(Static(f"{rank_icon} {rank_text} - {player_name}", classes="result-rank"))
+            result_card.mount(Static(f"Score: {score} points", classes="result-score"))
+            result_card.mount(Static(f'Response: "{response}"', classes="result-response"))
+            
+            # Mount card to container and container to main container
+            result_container.mount(result_card)
+            container.mount(result_container)
             
     def on_button_pressed(self, event: Button.Pressed):
         """Handle button press events."""

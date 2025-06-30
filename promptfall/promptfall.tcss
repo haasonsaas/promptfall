@@ -331,34 +331,50 @@ Button {
 }
 
 #responses-container {
-    height: 1fr;
+    height: auto;
+    min-height: 20;
     margin: 1 0;
+    border: solid $background;
+    padding: 1;
 }
 
 .response-container {
     margin: 1 0;
+    height: auto;
 }
 
 .response-card {
     border: solid $secondary;
     padding: 1;
     margin: 1 0;
+    height: auto;
+    background: $surface;
 }
 
 .response-author {
     text-style: bold;
     color: $primary;
     margin-bottom: 1;
+    height: auto;
 }
 
 .response-text {
     color: $text;
     text-wrap: wrap;
     margin-bottom: 1;
+    height: auto;
+    min-height: 3;
 }
 
 .vote-button {
     width: 100%;
+    margin: 1 0;
+}
+
+.no-responses {
+    color: $text-muted;
+    content-align: center middle;
+    height: 10;
 }
 
 #voting-actions {
@@ -392,35 +408,51 @@ Button {
 }
 
 #results-container {
-    height: 1fr;
+    height: auto;
+    min-height: 20;
     margin: 1 0;
+    border: solid $background;
+    padding: 1;
 }
 
 .result-container {
     margin: 1 0;
+    height: auto;
 }
 
 .result-card {
     border: solid $success;
     padding: 1;
     margin: 1 0;
+    height: auto;
+    background: $surface;
 }
 
 .result-rank {
     text-style: bold;
     color: $accent;
     margin-bottom: 1;
+    height: auto;
 }
 
 .result-score {
     color: $primary;
     margin-bottom: 1;
+    height: auto;
 }
 
 .result-response {
     color: $text;
     text-wrap: wrap;
     margin-bottom: 1;
+    height: auto;
+    min-height: 2;
+}
+
+.no-results {
+    color: $text-muted;
+    content-align: center middle;
+    height: 10;
 }
 
 #results-actions {
