@@ -7,7 +7,11 @@
       "Bash(cp:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(promptfall)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(gh repo edit:*)"
     ],
     "deny": []
   }
