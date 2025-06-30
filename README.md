@@ -1,0 +1,64 @@
+# ⚔️ Promptfall
+
+A competitive real-time prompt dueling game that combines the fast-paced action of Tetris Attack with the creativity of Cards Against Humanity and the power of GPT.
+
+## 🎮 Game Concept
+
+Promptfall is a real-time competitive game where players:
+- Receive prompt challenges under time pressure
+- Generate creative AI responses using OpenAI's GPT
+- Vote on the best responses
+- Compete in fast-paced dueling matches
+
+## 🚀 Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/haasonhaas/promptfall.git
+cd promptfall
+
+# Install dependencies
+pip install -e .
+
+# Copy environment file and add your OpenAI API key
+cp .env.example .env
+# Edit .env with your OpenAI API key
+```
+
+## 🎯 Usage
+
+```bash
+# Run the game
+promptfall
+
+# Or run directly with Python
+python -m promptfall.main
+```
+
+## 🔧 Development
+
+```bash
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Run tests
+pytest
+
+# Format code
+black .
+ruff check .
+```
+
+## 📝 License
+
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+
+## 👨‍💻 Author
+
+**Jonathan Haas** (jonathan@haas.holdings) - 2025
+
+## 🛠️ Built With
+
+- [Textual](https://github.com/Textualize/textual) - Modern Python TUI framework
+- [OpenAI API](https://openai.com/api/) - AI response generation
+- WebSockets - Real-time multiplayer support

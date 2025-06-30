@@ -1,0 +1,38 @@
+[project]
+name = "promptfall"
+version = "0.1.0"
+description = "A competitive real-time prompt dueling game"
+authors = [
+    { name = "Jonathan Haas", email = "jonathan@haas.holdings" }
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "textual>=0.41.0",
+    "openai>=1.0.0",
+    "websockets>=12.0",
+    "python-dotenv>=1.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=22.0",
+    "ruff>=0.1.0"
+]
+
+[project.scripts]
+promptfall = "promptfall.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.ruff]
+line-length = 88
+target-version = "py38"
